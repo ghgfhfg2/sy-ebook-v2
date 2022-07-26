@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <link rel="stylesheet" href="./css/base.css">
+    <link rel="stylesheet" href="./css/ebook.css"> 
+    <script src="./js/ebook.js"></script>
+    
+
+  </head>
+  <body>
+    <div class="ebook__wrapper">
+      <div class="ebook__top-box">
+        <h2>
+          <img src="./img/logo.svg" alt="" class="logo">
+        </h2>
+        <div class="ebook__top-box-right">
+          <ul class="ebook__top-box-btn-list">
+            <li>
+              <button type="button" class="ic_print" onclick="window.print()">
+                <img src="./img/ic_print.svg" alt="">
+                <span>출력</span>
+              </button>
+            </li>
+            <li>
+              <a href="./img/상품카달로그(22.05.11)_펼침면.pdf" download class="ic_download">
+                <img src="./img/ic_download.svg" alt="">
+                <span>다운로드</span>
+              </a>
+            </li>
+            <li>
+              <button type="button" class="ic_share">
+                <img src="./img/ic_share.svg" alt="">
+                <span>공유</span>
+              </button>
+            </li>
+          </ul>
+          <button type="button" class="ebook__top_view_total">
+            <img src="./img/ic_all_zoom.svg" alt="">
+            <span>전체화면</span>
+          </button>
+          <button type="button" class="ebook__top_control_close"></button>
+        </div>        
+      </div>      
+      <div class="ebook__mini_map">
+        <div class="ebook__mini_map_img_box"></div>
+      </div>
+      <div onmousedown="dragBoxEvent(event)" class="ebook__mini_map_drag_box"></div>
+      <div class="ebook_scroll_box">
+        <div class="ebook__scroll">
+          <div class="ebook__container" onmousemove="move();" onmouseup="leave()" onmousedown="set_value();">     
+            <div class="cover" style="position:absolute;width:100%;height:100%;left:0;top:0;z-index:10"></div>     
+            <ul class="ebook__img-list">
+              <li>
+                <img src="./img/ebook/ebook_1.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_2.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_3.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_4.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_5.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_6.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_7.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_8.jpg" alt="">
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="ebook__right-floating">
+          <div class="ebook__scale">
+            <button type="button" class="ebook__scale-zoom-in"><span class="wid"></span><span class="height"></span></button>
+            <input type="range" class="ebook__scale-zoom-range" min="1" max="3" onchange="onZoomRange(this)">
+            <div class="ebook__scale-txt">
+              <span>Max</span>
+              <span>100%</span>
+              <span>Min</span>
+            </div>
+            <button type="button" class="ebook__scale-zoom-out"><span class="wid"></span></button>
+          </div>
+          <div class="ebook__page-move-control">
+            <button type="button" class="ebook__page-move-btn prev"></button>
+            <div class="ebook__page-txt">
+              <span class="cur"></span>/
+              <span class="total"></span>
+            </div>
+            <ul class="ebook__page-move-list"></ul>
+            <button type="button" class="ebook__page-move-btn next"></button>
+          </div>
+          <div class="ebook__page_control">
+            <button type="button" class="ebook__bottom_control_page_list" onclick="onPageListModal()">
+              <img src="./img/ic_list.png" alt="">
+            </button>
+            <button type="button" class="ebook__bottom_control_page basic">일반보기</button>
+            <button type="button" class="ebook__bottom_control_page page_1">한장</button>
+            <button type="button" class="ebook__bottom_control_page page_2">두장</button>
+          </div>
+        </div>
+        <div class="ebook__control">
+          <button type="button" class="ebook__prev on"><span>이전</span></button>
+          <button type="button" class="ebook__next on"><span>다음</span></button>
+        </div>
+      </div>      
+      <div class="ebook__bottom-box">
+        <span class="ebook__bottom-copyright">
+          copyright. MEURE all right reserved.
+        </span>
+        <ul class="ebook__bottom-link">
+          <li><a href="#" class="ic_home">
+            <img src="./img/ic_home.svg" alt="">
+          </a></li>
+          <li><a href="#" class="ic_insta">
+            <img src="./img/ic_insta.svg" alt="">
+          </a></li>
+          <li><a href="#" class="ic_kakao">
+            <img src="./img/ic_kakao.svg" alt="">
+          </a></li>
+        </ul>
+      </div>
+      <!-- 페이지목록 팝업 -->
+      <div class="ebook__page_modal_wrapper">
+        <div class="ebook__page_modal">
+          <div class="top">
+            <span><img src="./img/ic_list_sm.png" alt="">목차</span>
+            <button type="button" onclick="closePageListModal()" class="btn_close">
+            </button>
+          </div>
+          <ul class="ebook__page_modal_list">
+            <li>
+              <img src="./img/ebook/ebook_1.jpg" alt="">
+              <span>1. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_2.jpg" alt="">
+              <span>2. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_3.jpg" alt="">
+              <span>3. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_4.jpg" alt="">
+              <span>4. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_5.jpg" alt="">
+              <span>5. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_6.jpg" alt="">
+              <span>6. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_7.jpg" alt="">
+              <span>7. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_8.jpg" alt="">
+              <span>8. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_1.jpg" alt="">
+              <span>1. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_2.jpg" alt="">
+              <span>2. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_3.jpg" alt="">
+              <span>3. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_4.jpg" alt="">
+              <span>4. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_5.jpg" alt="">
+              <span>5. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_6.jpg" alt="">
+              <span>6. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_7.jpg" alt="">
+              <span>7. 표지</span>
+            </li>
+            <li>
+              <img src="./img/ebook/ebook_8.jpg" alt="">
+              <span>8. 표지</span>
+            </li>
+          </ul>
+        </div>
+        <div class="bg" onclick="closePageListModal()"></div>
+      </div>
+      <!-- //페이지목록 팝업 -->
+    </div>
+  </body>
+</html>
+
+<script>
+const ebook = new Ebook('.ebook__wrapper',{
+  prev:'.ebook__prev',
+  next:'.ebook__next',
+  currentPage:'.ebook__page-current',
+  breakPoints:{
+    768:{
+      pageShow:1
+    }
+  }
+})
+ebook.init();
+const toPage = (num) => {
+  ebook.page = num;
+  ebook.pageSet();
+}
+const pageListToggle = () => {
+  ebook.pageListToggleOn()
+}
+
+
+let pre_x = 0, pre_y = 0, dragging = false;
+let moveCheck = false;
+function set_value()
+{
+  moveCheck = false;
+  dragging = true;
+  pre_x = event.x;
+  pre_y = event.y;
+}
+
+function leave() {
+  dragging = false;
+}
+
+let scrollBox = document.querySelector('.ebook_scroll_box')
+function move()
+{ 
+  if(dragging){
+    document.querySelector('.ebook_scroll_box.zoom-mode .ebook__scroll')?.classList.add('move')
+  }else{
+    document.querySelector('.ebook_scroll_box.zoom-mode .ebook__scroll')?.classList.remove('move');
+    return
+  }
+  let delta_x = pre_x - event.x;
+  let delta_y = pre_y - event.y;
+  pre_x = event.x;
+  pre_y = event.y;
+  moveCheck = true;
+  scrollBox.scrollBy(delta_x,delta_y);
+
+  let perX = ebook.scrollBox.scrollLeft/ebook.scrollBox.scrollWidth
+  let perY = ebook.scrollBox.scrollTop/ebook.scrollBox.scrollHeight
+  ebook.dragBox.style.left = ebook.miniMap.offsetLeft + ebook.miniMap.clientWidth*perX + 'px';
+  ebook.dragBox.style.top = ebook.miniMap.offsetTop + ebook.miniMap.clientHeight*perY + 'px';
+}
+
+function onZoomRange(e){
+  let step = e.value;
+  switch(step){
+    case '3':
+      ebook.imgZoomMax();
+      break;
+    case '1':
+      ebook.imgZoomMin();
+      break;
+    default :
+      ebook.imgZoomDefault();
+      break;
+  }
+}
+
+const pageListModal = document.querySelector('.ebook__page_modal_wrapper')
+function onPageListModal(){
+  pageListModal.classList.add('on');
+  const list = pageListModal.querySelectorAll('li');
+  list.forEach((el,idx)=>{
+    el.addEventListener('click',function(){
+      toPage(idx+1);
+      closePageListModal();
+    })
+    if(ebook.page === idx+1){
+      el.classList.add('on');
+    }else{
+      el.classList.remove('on');
+    }
+  })
+}
+
+function closePageListModal(){
+  const list = pageListModal.querySelectorAll('li');
+
+  pageListModal.classList.remove('on');
+}
+
+
+let dragBox = document.querySelector('.ebook__mini_map_drag_box');
+
+
+let miniPre_x = 0, miniPre_y = 0, miniDragging = false;
+let minuMoveCheck = false;
+function miniSet_value()
+{
+  minuMoveCheck = false;
+  miniDragging = true;
+  miniPre_x = event.x;
+  miniPre_y = event.y;
+}
+
+function miniLeave() {
+  miniDragging = false;
+}
+
+function miniMove()
+{ 
+  let delta_x = event.x - miniPre_x;
+  let delta_y = event.y - miniPre_y;
+  miniPre_x = event.x;
+  miniPre_y = event.y;
+  minuMoveCheck = true;
+  scrollBox.scrollBy(delta_x*20,delta_y*20);
+}
+function dragBoxEvent(event) {
+  let miniMap = document.querySelector('.ebook__mini_map');
+  let minLeft = miniMap.offsetLeft;
+  let minTop = miniMap.offsetTop;
+  let maxLeft = miniMap.offsetLeft + miniMap.clientWidth;
+  let maxTop = miniMap.offsetTop + miniMap.clientHeight;
+  let shiftX = event.clientX - dragBox.getBoundingClientRect().left;
+  let shiftY = event.clientY - dragBox.getBoundingClientRect().top;
+  miniSet_value();
+  moveAt(event.pageX, event.pageY);
+
+  // 초기 이동을 고려한 좌표 (pageX, pageY)에서
+  // 공을 이동합니다.
+  function moveAt(pageX, pageY) {
+    if(pageX - shiftX < minLeft){
+      dragBox.style.left = minLeft + 'px'
+    }else if(pageX - shiftX > maxLeft-dragBox.clientWidth){
+      dragBox.style.left = maxLeft-dragBox.clientWidth + 'px'
+    }else{
+      dragBox.style.left = pageX - shiftX + 'px';
+    }
+    if(pageY - shiftY < minTop){
+      dragBox.style.top = minTop + 'px'
+    }else if(pageY - shiftY > maxTop-dragBox.clientHeight){
+      dragBox.style.top = maxTop-dragBox.clientHeight + 'px'
+    }else{
+      dragBox.style.top = pageY - shiftY + 'px';
+    }
+  }
+
+  function onMouseMove(event) {
+    let moveX = event.pageX;
+    let moveY = event.pageY;
+    moveAt(moveX, moveY);
+    miniMove();
+  }
+
+  // mousemove로 공을 움직입니다.
+  document.addEventListener('mousemove', onMouseMove);
+
+  // 공을 드롭하고, 불필요한 핸들러를 제거합니다.
+  dragBox.onmouseup = function() {
+    miniLeave();
+    document.removeEventListener('mousemove', onMouseMove);
+    dragBox.onmouseup = null;
+  };
+
+  window.onmouseup = function(e) {
+    let x = e.x;
+    let y = e.y;
+    if(x < minLeft || x > maxLeft || y < minTop || y > maxTop){
+      miniLeave();
+      document.removeEventListener('mousemove', onMouseMove);
+      dragBox.onmouseup = null;
+    }
+  }
+
+};
+
+dragBox.ondragstart = function() {
+  return false;
+};
+  
+
+</script>
