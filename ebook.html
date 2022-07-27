@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>meure ebook</title>
 
     <link rel="stylesheet" href="./css/base.css">
     <link rel="stylesheet" href="./css/ebook.css"> 
@@ -33,7 +33,7 @@
               </a>
             </li>
             <li>
-              <button type="button" class="ic_share">
+              <button type="button" class="ic_share" onclick="onShareListModal()">
                 <img src="./img/ic_share.svg" alt="">
                 <span>공유</span>
               </button>
@@ -133,7 +133,7 @@
         </ul>
       </div>
       <!-- 페이지목록 팝업 -->
-      <div class="ebook__page_modal_wrapper">
+      <div class="com_pop_wrap ebook__page_modal_wrapper">
         <div class="ebook__page_modal">
           <div class="top">
             <span><img src="./img/ic_list_sm.png" alt="">목차</span>
@@ -210,9 +210,57 @@
         <div class="bg" onclick="closePageListModal()"></div>
       </div>
       <!-- //페이지목록 팝업 -->
+      <!-- 공유 팝업 -->
+      <div class="com_pop_wrap ebook__share_wrap">
+        <div class="ebook__share_con">
+          <div class="top">
+            <span>
+              <img src="./img/ic_share_top.svg" alt="">
+              공유
+            </span>
+            <button onclick="closeShareListModal()" type="button" class="ebook__top_control_close"></button>
+          </div>
+          <div class="con_box">
+            <ul class="share_list">
+              <li>
+                <button type="button" onclick="KaKaosendLink('미에르 공식쇼핑몰-meure','https://meure.co.kr/index/_upload/goods/beauty/04_becina_oil_mist/p_04_becina_oil_mist_135ml_shot.jpg','https://meure.co.kr/index/shop.php?cat=00010002&r=view&uid=15&sponsor=','비치나 오일 미스트-BECINA OIL MIST')">
+                  <img src="./img/ic_share_kakao.png" alt="">
+                </button>
+              </li>
+              <li>
+                <button type="button" onclick="onShare('blog')">
+                  <img src="./img/ic_share_blog.png" alt="">
+                </button>
+              </li>
+              <!-- <li>
+                <button type="button">
+                  <img src="./img/ic_share_insta.png" alt="">
+                </button>
+              </li> -->
+              <li>
+                <button type="button" onclick="onShare('face')">
+                  <img src="./img/ic_share_face.png" alt="">
+                </button>
+              </li>
+              <li>
+                <button type="button" onclick="onShare('twt')">
+                  <img src="./img/ic_share_twt.png" alt="">
+                </button>
+              </li>
+            </ul>
+            <div class="copy_url">
+              <input type="text" readonly value="http://127.0.0.1:5500/ebook.html">
+              <button onclick="textCopy('.copy_url input')" type="button" class="btn_copy">주소 복사</button>
+            </div>
+          </div>
+        </div>
+        <div onclick="closeShareListModal()" class="bg"></div>
+      </div>
+      <!-- //공유 팝업 -->
     </div>
   </body>
 </html>
+<script type="text/javascript" src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
 <script>
 const ebook = new Ebook('.ebook__wrapper',{
@@ -286,6 +334,21 @@ function onZoomRange(e){
   }
 }
 
+const shareListModal = document.querySelector('.ebook__share_wrap');
+function onShareListModal(){
+  shareListModal.classList.add('on');
+}
+function closeShareListModal(){
+  shareListModal.classList.remove('on');
+}
+
+function textCopy(div){
+  let box = document.querySelector(div);
+  box.select();
+  document.execCommand('copy');
+  alert('주소가 복사되었습니다.')
+}
+
 const pageListModal = document.querySelector('.ebook__page_modal_wrapper')
 function onPageListModal(){
   pageListModal.classList.add('on');
@@ -305,9 +368,58 @@ function onPageListModal(){
 
 function closePageListModal(){
   const list = pageListModal.querySelectorAll('li');
-
   pageListModal.classList.remove('on');
 }
+
+
+//공유
+function onShare(type) {
+  let urlTxt = 'https://meure.co.kr'
+  let url = encodeURI(encodeURIComponent(urlTxt));
+  let url2 = encodeURIComponent(urlTxt);
+  let twtText = '미에르 e-book'
+  const title = encodeURI(document.title);
+  let shareURL;
+  if(type === 'blog'){
+    shareURL = "https://share.naver.com/web/shareView?url=" + url + "&title=" + title;
+  }
+  if(type === 'face'){
+    shareURL = "https://www.facebook.com/sharer/sharer.php?u="+url2
+  }
+  if(type === 'twt'){
+    shareURL = "https://twitter.com/intent/tweet?text=" + twtText + "&url=" + urlTxt
+  }
+  window.open(shareURL)
+}
+Kakao.init('f225842d8152b618857ba7b3a9b37ffa');
+//<![CDATA[
+// // 사용할 앱의 JavaScript 키를 설정해 주세요.
+// // 카카오링크 버튼을 생성합니다. 처음 한번만 호출하면 됩니다.
+function KaKaosendLink(snstitle,snsimg,snsurl,snstxt) {
+Kakao.Link.sendDefault({
+	objectType: 'feed',
+	content: {
+	title: snstitle,
+	description: snstxt,
+	imageUrl: snsimg,
+	link: {
+		mobileWebUrl: snsurl,
+		webUrl: snsurl
+	}
+	},
+
+	buttons: [
+	{
+		title: '웹으로 보기',
+		link: {
+		mobileWebUrl: snsurl,
+		webUrl: snsurl
+		}
+	}
+	]
+});
+}
+//]]>
 
 
 let dragBox = document.querySelector('.ebook__mini_map_drag_box');
@@ -347,8 +459,6 @@ function dragBoxEvent(event) {
   miniSet_value();
   moveAt(event.pageX, event.pageY);
 
-  // 초기 이동을 고려한 좌표 (pageX, pageY)에서
-  // 공을 이동합니다.
   function moveAt(pageX, pageY) {
     if(pageX - shiftX < minLeft){
       dragBox.style.left = minLeft + 'px'
@@ -373,10 +483,8 @@ function dragBoxEvent(event) {
     miniMove();
   }
 
-  // mousemove로 공을 움직입니다.
   document.addEventListener('mousemove', onMouseMove);
 
-  // 공을 드롭하고, 불필요한 핸들러를 제거합니다.
   dragBox.onmouseup = function() {
     miniLeave();
     document.removeEventListener('mousemove', onMouseMove);

@@ -273,7 +273,7 @@ class Ebook {
     },10)
   }
   imgZoomDefault(){
-    this.miniMap.classList.remove('on');
+    this.closeMiniMap()
     this.scrollBox.classList.remove('zoom-mode');
     this.zoomMode = false;
     this.zoom = 1;
@@ -286,6 +286,9 @@ class Ebook {
     this.zoomTxt[1].classList.add('on')
   }
   imgZoomMin(){
+    this.closeMiniMap();
+    this.scrollBox.classList.remove('zoom-mode');
+    this.zoomMode = false;
     this.zoom = 0.4;
     this.imgList.style = `transform:scale(${this.zoom})`;
     this.zoomRange.value = '1';
