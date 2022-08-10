@@ -33,6 +33,7 @@ class Ebook {
     this.pageList = {};
     this.miniMap = this.div.querySelector('.ebook__mini_map');
     this.dragBox = this.div.querySelector('.ebook__mini_map_drag_box');
+    this.pageModalList = this.div.querySelectorAll('.ebook__page_modal_wrapper li');
   }
   init(){
     this.prev.addEventListener('click',()=>{
@@ -131,9 +132,15 @@ class Ebook {
   }
   pageShowTotal(){
     this.div.classList.add('total');
+    setTimeout(()=>{
+      this.btnSet();
+    },50)
   }
   pageShowBasic(){
     this.div.classList.remove('total');
+    setTimeout(()=>{
+      this.btnSet();
+    },50)
   }
 
   pageShowSingle(){
@@ -187,10 +194,11 @@ class Ebook {
     if(this.pageShow === 1){      
       this.list[this.page-1].classList.add('active')
     }
-    if(this.pageShow === 2){      
+    if(this.pageShow === 2){    
       if(this.page == 1){
         this.list[0].classList.add('active');
       }else{
+        this.page = this.page % 2 === 0 ? this.page : this.page - 1;
         this.list[this.page-1].classList.add('active');
         this.list[this.page] && this.list[this.page].classList.add('active','right');
       }
@@ -208,9 +216,21 @@ class Ebook {
     }else{
       this.div.querySelector('.ebook__prev').classList.add('on')
       this.div.querySelector('.ebook__next').classList.add('on')
-    }
+    }    
     this.onPageList();
     this.onMiniMap();
+    setTimeout(()=>{
+      this.btnSet();
+    },50)
+    
+  }
+  btnSet(){
+    const activeImg = this.imgList.querySelectorAll('.active img');
+    activeImg[0].offsetLeft
+    const prevX = activeImg[0].getBoundingClientRect().left;
+    const nextX = activeImg[activeImg.length - 1].getBoundingClientRect().right;
+    this.div.querySelector('.ebook__prev').style.width = prevX+'px'
+    this.div.querySelector('.ebook__next').style.left = nextX+'px'
   }
   toPrev(){
     if(this.page > 1){
@@ -244,6 +264,9 @@ class Ebook {
     }else{
       this.imgZoomDefault()
     }
+    setTimeout(()=>{
+      this.btnSet();
+    },50)
   }
   imgZoomOut(){
     if(this.zoom > 1){
@@ -251,6 +274,9 @@ class Ebook {
     }else{
       this.imgZoomMin()
     }
+    setTimeout(()=>{
+      this.btnSet();
+    },50)
   }
   imgZoomMax(){
     if(this.zoomMode) return;
@@ -284,6 +310,9 @@ class Ebook {
       el.classList.remove('on')
     })
     this.zoomTxt[1].classList.add('on')
+    setTimeout(()=>{
+      this.btnSet();
+    },50)
   }
   imgZoomMin(){
     this.closeMiniMap();
@@ -337,6 +366,13 @@ class Ebook {
       if(curPage === idx && realIdx === pageIdx){
         this.pageSetTxt.querySelector('.cur').innerHTML = el
         pageHtml += `<li onclick='toPage(${el})' class='on'>${el}</li>`
+        this.pageModalList.forEach((e,idx)=>{
+          if(el == idx+1){
+            e.classList.add('on')
+          }else{
+            e.classList.remove('on')
+          }
+        })
       }else{
         pageHtml += `<li onclick='toPage(${el})'>${el}</li>`
       }
@@ -367,7 +403,14 @@ class Ebook {
       let list = el.join(' - ');
       if(curPage === idx && realIdx === pageIdx){
         this.pageSetTxt.querySelector('.cur').innerHTML = list.split(' - ').join('-')
-        pageHtml += `<li onclick='toPage(${list.split(' - ')[0]})' class='on'>${list}</li>`
+        pageHtml += `<li onclick='toPage(${list.split(' - ')[0]})' class='on'>${list}</li>`;
+        this.pageModalList.forEach((e,idx)=>{
+          if(el.includes(idx+1)){
+            e.classList.add('on')
+          }else{
+            e.classList.remove('on')
+          }
+        })
       }else{
         pageHtml += `<li onclick='toPage(${list.split(' - ')[0]})'>${list}</li>`
       }

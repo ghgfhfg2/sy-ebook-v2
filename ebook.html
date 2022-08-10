@@ -21,7 +21,7 @@
         <div class="ebook__top-box-right">
           <ul class="ebook__top-box-btn-list">
             <li>
-              <button type="button" class="ic_print" onclick="window.print()">
+              <button type="button" class="ic_print" onclick="onPrint('.ebook__img-list')">
                 <img src="./img/ic_print.svg" alt="">
                 <span>출력</span>
               </button>
@@ -43,7 +43,6 @@
             <img src="./img/ic_all_zoom.svg" alt="">
             <span>전체화면</span>
           </button>
-          <button type="button" class="ebook__top_control_close"></button>
         </div>        
       </div>      
       <div class="ebook__mini_map">
@@ -53,7 +52,7 @@
       <div class="ebook_scroll_box">
         <div class="ebook__scroll">
           <div class="ebook__container" onmousemove="move();" onmouseup="leave()" onmousedown="set_value();">     
-            <div class="cover" style="position:absolute;width:100%;height:100%;left:0;top:0;z-index:10"></div>     
+            <!-- <div class="cover" style="position:absolute;width:100%;height:100%;left:0;top:0;z-index:10"></div>      -->
             <ul class="ebook__img-list">
               <li>
                 <img src="./img/ebook/ebook_1.jpg" alt="">
@@ -83,6 +82,10 @@
           </div>
         </div>
         <div class="ebook__right-floating">
+          <button type="button" class="ebook__bottom_control_page basic">
+            <img src="./img/zoom_out.svg">
+            <span>기본화면</span>
+          </button>
           <div class="ebook__scale">
             <button type="button" class="ebook__scale-zoom-in"><span class="wid"></span><span class="height"></span></button>
             <input type="range" class="ebook__scale-zoom-range" min="1" max="3" onchange="onZoomRange(this)">
@@ -105,8 +108,7 @@
           <div class="ebook__page_control">
             <button type="button" class="ebook__bottom_control_page_list" onclick="onPageListModal()">
               <img src="./img/ic_list.png" alt="">
-            </button>
-            <button type="button" class="ebook__bottom_control_page basic">일반보기</button>
+            </button>            
             <button type="button" class="ebook__bottom_control_page page_1">한장</button>
             <button type="button" class="ebook__bottom_control_page page_2">두장</button>
           </div>
@@ -274,6 +276,31 @@ const ebook = new Ebook('.ebook__wrapper',{
   }
 })
 ebook.init();
+
+
+
+function onPrint() {
+  let hiddenHeader = document.querySelector('.ebook__top-box');
+  let hiddenSide = document.querySelector('.ebook__right-floating');
+  let hiddenBottom = document.querySelector('.ebook__bottom-box');
+  let hiddenBtn = document.querySelector('.ebook__control');
+ 
+  window.onbeforeprint = function () {
+    hiddenHeader.style.display = "none";
+    hiddenSide.style.display = "none";
+    hiddenBottom.style.display = "none";
+    hiddenBtn.style.display = "none";
+  }
+  window.onafterprint = function () {
+    hiddenHeader.style.display = "flex";
+    hiddenSide.style.display = "flex";
+    hiddenBottom.style.display = "flex";
+    hiddenBtn.style.display = "block";
+  }
+  window.print();
+}
+
+
 const toPage = (num) => {
   ebook.page = num;
   ebook.pageSet();
@@ -311,7 +338,11 @@ function move()
   pre_x = event.x;
   pre_y = event.y;
   moveCheck = true;
-  scrollBox.scrollBy(delta_x,delta_y);
+  if(event.x <= 80 || event.x >= window.innerWidth - 80 || event.y <= 80 || event.y >= window.innerHeight - 80){
+    leave()
+  }else{
+    scrollBox.scrollBy(delta_x,delta_y);
+  }
 
   let perX = ebook.scrollBox.scrollLeft/ebook.scrollBox.scrollWidth
   let perY = ebook.scrollBox.scrollTop/ebook.scrollBox.scrollHeight
@@ -356,15 +387,12 @@ function onPageListModal(){
   list.forEach((el,idx)=>{
     el.addEventListener('click',function(){
       toPage(idx+1);
+      ebook.pageSet();
       closePageListModal();
     })
-    if(ebook.page === idx+1){
-      el.classList.add('on');
-    }else{
-      el.classList.remove('on');
-    }
   })
 }
+
 
 function closePageListModal(){
   const list = pageListModal.querySelectorAll('li');
@@ -478,7 +506,7 @@ function dragBoxEvent(event) {
 
   function onMouseMove(event) {
     let moveX = event.pageX;
-    let moveY = event.pageY;
+    let moveY = event.pageY;    
     moveAt(moveX, moveY);
     miniMove();
   }
@@ -506,6 +534,14 @@ function dragBoxEvent(event) {
 dragBox.ondragstart = function() {
   return false;
 };
+
+let resizeTimer;
+window.addEventListener('resize',()=>{
+  clearTimeout(resizeTimer)
+  resizeTimer = setTimeout(()=>{
+    ebook.btnSet()
+  },50)  
+})
   
 
 </script>

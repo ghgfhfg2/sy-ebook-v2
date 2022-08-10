@@ -59,7 +59,7 @@
 .ebook_scroll_box{
 	width: 100vw;height: calc(100vh - 100px);
 	overflow: auto;
-	cursor: url(../img/cursor_plus.png) 35 35,auto;
+	
 }
 .ebook_scroll_box::-webkit-scrollbar {
 	width: 8px;height: 8px;
@@ -101,11 +101,9 @@
 	transition: all 0.2s;
 	width: 100%;
 	padding:20px;
+	
 }
-.ebook_scroll_box.zoom-mode .ebook__scroll{
-	cursor: url(../img/cursor_minus.png) 35 35,auto;
-}
-.ebook_scroll_box.zoom-mode .ebook__scroll.move{
+.ebook_scroll_box.zoom-mode .ebook__scroll.move li img{
 	cursor: move;
 }
 
@@ -133,7 +131,12 @@
 	animation: fade_in 0.3s both;
 	position: relative;
 }
-.ebook__img-list li img{max-height: 80vh;}
+.ebook__img-list li img{max-height: 80vh;
+	cursor: url(../img/cursor_plus.png) 35 35,auto;
+}
+.ebook_scroll_box.zoom-mode .ebook__img-list li img{
+	cursor: url(../img/cursor_minus.png) 35 35,auto;
+}
 
 /* 가운데 그림자 */
 /*
@@ -224,17 +227,15 @@
 .ebook__wrapper.single .ebook__page-back .right{display: none;}
 .ebook__wrapper.single .ebook__page-back.first .right{display: block;}
 .ebook__control button{
-	position: fixed;width: 100vw;height: 100vh;
+	position: fixed;height: calc(100vh - 100px);
 	display: flex;align-items: center;
 	opacity: 0.5;
-	width: 50px;height:50px;	
-	top:50%;
-	margin-top: -25px;
-	transition: all 0.3s;
+	top:50px;
+	transition: all 0.2s;
 	z-index: 200;
 	display: none;
 }
-.ebook__control button.on{display: block;}
+.ebook__control button.on{display: flex;}
 .ebook__control button:hover{opacity: 1;}
 .ebook__control button span{
 	display: block;	
@@ -242,10 +243,15 @@
 	border: 3px solid rgba(0,0,0,0.5);
 	text-indent: -9999px;
 }
-.ebook__control .ebook__prev{left: 0;padding-left: 20px;}
-.ebook__control .ebook__next{right: 0;padding-right: 20px;justify-content: flex-end;}
+.ebook__control .ebook__prev{left: 0;padding-right: 20px;
+	display: flex;justify-content: flex-end;
+}
+.ebook__control .ebook__next{right: 0;padding-left: 19px;justify-content: flex-start;}
 .ebook__control .ebook__prev span{border-width: 0 0 2px 2px;transform: rotate(45deg);}
 .ebook__control .ebook__next span{border-width: 0 0 2px 2px;transform: rotate(-135deg);}
+.zoom-mode .ebook__control .ebook__prev{left: 0 !important;width: 70px !important;}
+.zoom-mode .ebook__control .ebook__next{right: 0 !important;left: inherit !important;width: 70px !important;}
+
 
 .ebook__page-current::-webkit-outer-spin-button,
 .ebook__page-current::-webkit-inner-spin-button {
@@ -291,7 +297,7 @@
 
 /* 페이지 리스트 */
 .ebook__page-move-control{position: relative;;z-index: 100;
-	cursor: auto;margin-top: 7vh;
+	cursor: auto;
 	display: flex;flex-direction: column;align-items: center;
 }
 .ebook__page-move-btn{
@@ -329,13 +335,19 @@
 /* 전체보기 */
 .total .ebook__bottom_control_page.total{display: none;}
 .total .ebook__bottom_control_page.basic{
-	display: block;
+	display: flex;justify-content: center;align-items: center;
+	width: 92px;height: 35px;
+	background-color: #d39f4b;color: #f7f1e8;
+}
+.total .ebook__bottom_control_page.basic img{
+	width: 16px;height: 16px;margin-right: 8px;
 }
 .total .ebook_scroll_box{height: 100vh;}
 .total.ebook__wrapper{padding: 0;}
 .total .ebook__top-box{display: none;}
 .total .ebook__bottom-box{display: none;}
 .total .ebook__img-list li img{max-height: calc(100vh - 40px);}
+
 	
 .ebook__page-control{display: flex;align-items: center;}
 .ebook__top-box{
@@ -413,7 +425,7 @@
 
 
 .ebook__right-floating{
-	position: fixed;right: 130px;top:50%;display: flex;flex-direction: column;align-items: center;justify-content: space-between;z-index: 200;
+	position: fixed;right: 130px;top:50%;display: flex;flex-direction: column;align-items: center;justify-content: space-between;z-index: 500;
 	height: 80vh;cursor: auto;
 	transform: translateY(-50%);
 }
