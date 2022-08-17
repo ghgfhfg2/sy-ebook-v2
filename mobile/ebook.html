@@ -39,7 +39,7 @@
       </div>      
       <div class="ebook_scroll_box">
         <div class="ebook__scroll">
-          <div class="ebook__container">     
+          <div class="ebook__container" ontouchend="leave()" ontouchstart="set_value()">     
             <div class="cover" style="position:absolute;width:100%;height:100%;left:0;top:0;z-index:10"></div>     
             <ul class="ebook__img-list">
               <li>
@@ -234,6 +234,8 @@
 <script type="text/javascript" src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
 <script>
+
+
 const ebook = new Ebook('.ebook__wrapper',{
   prev:'.ebook__prev',
   next:'.ebook__next',
@@ -252,6 +254,24 @@ const toPage = (num) => {
 const pageListToggle = () => {
   ebook.pageListToggleOn()
 }
+
+
+let pre_x = 0, pre_y = 0;
+function set_value()
+{
+  pre_x = event.changedTouches[0].clientX;
+  pre_y = event.changedTouches[0].clientY;
+}
+
+function leave() {
+  if(pre_x - event.changedTouches[0].clientX > 20){
+    ebook.toNext();
+  }
+  if(pre_x - event.changedTouches[0].clientX < -20){
+    ebook.toPrev();
+  }
+}
+
 
 
 function onZoomRange(e){
@@ -293,11 +313,6 @@ function onPageListModal(){
       toPage(idx+1);
       closePageListModal();
     })
-    if(ebook.page === idx+1){
-      el.classList.add('on');
-    }else{
-      el.classList.remove('on');
-    }
   })
 }
 

@@ -8,6 +8,7 @@ class Ebook {
     this.list = this.imgList.querySelectorAll('li');
     this.length = this.list.length;
     this.page = 1;
+    this.prevPage = 1;
     this.pageSetIdx;
     this.pageSetTxt = this.div.querySelector('.ebook__page-txt');
     this.pageSetPrev = this.div.querySelector('.ebook__page-move-btn.prev');
@@ -33,6 +34,7 @@ class Ebook {
     this.pageList = {};
     this.miniMap = this.div.querySelector('.ebook__mini_map');
     this.dragBox = this.div.querySelector('.ebook__mini_map_drag_box');
+    this.pageModalList = this.div.querySelectorAll('.ebook__page_modal_wrapper li');
   }
   init(){
     this.prev.addEventListener('click',()=>{
@@ -156,6 +158,13 @@ class Ebook {
   }
 
   pageSet(){
+    let direction = this.page - this.prevPage;
+    if(direction > 0){
+      this.div.classList.remove('prev')
+    }else{
+      this.div.classList.add('prev')
+    }
+    this.prevPage = this.page
     if(this.pageShow == 1){
       this.div.classList.add('single')
       this.div.classList.remove('double')
@@ -183,6 +192,7 @@ class Ebook {
       if(this.page == 1){
         this.list[0].classList.add('active');
       }else{
+        this.page = this.page % 2 === 0 ? this.page : this.page - 1;
         this.list[this.page-1].classList.add('active');
         this.list[this.page] && this.list[this.page].classList.add('active','right');
       }
@@ -318,6 +328,13 @@ class Ebook {
       if(curPage === idx && realIdx === pageIdx){
         this.pageSetTxt.querySelector('.cur').innerHTML = el
         pageHtml += `<li onclick='toPage(${el})' class='on'>${el}</li>`
+        this.pageModalList.forEach((e,idx)=>{
+          if(el == idx+1){
+            e.classList.add('on')
+          }else{
+            e.classList.remove('on')
+          }
+        })
       }else{
         pageHtml += `<li onclick='toPage(${el})'>${el}</li>`
       }
@@ -348,9 +365,16 @@ class Ebook {
       let list = el.join(' - ');
       if(curPage === idx && realIdx === pageIdx){
         this.pageSetTxt.querySelector('.cur').innerHTML = list.split(' - ').join('-')
-        pageHtml += `<li onclick='toPage(${list.split(' - ')[0]})' class='on'>${list}</li>`
+        pageHtml += `<li onclick='toPage(${list.split(' - ')[0]})' class='on'>${list}</li>`;
+        this.pageModalList.forEach((e,idx)=>{
+          if(el.includes(idx+1)){
+            e.classList.add('on')
+          }else{
+            e.classList.remove('on')
+          }
+        })
       }else{
-        pageHtml += `<li onclick='toPage(${list.split(' - ')[0]})'>${list}</li>`
+        pageHtml += `<li onclick='toPage(${list.split(' - ')[0]})'>${list}</li>`;
       }
     })
     this.pageListUl.innerHTML = pageHtml;  

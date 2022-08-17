@@ -107,7 +107,7 @@
 	justify-content: center;
 	position: relative;
 	z-index: 1;
-	box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.25);
+	
 }
 .ebook__img-list li{
 	display: none;
@@ -118,12 +118,15 @@
 	animation: page_open 0.2s 0.2s both;
 	position: relative;
 	transform-origin: right;
-}
-
-.ebook__img-list li.active{
-	display: block;
+	box-shadow: -5px 0px 7px 0px rgba(0,0,0,0.25);
 	animation: fade_in 0.3s both;
 	position: relative;
+}
+.prev .ebook__img-list li.active{
+	animation-name: fade_prev;
+}
+.ebook__img-list li.active.right{
+	box-shadow: 5px 0 7px 0px rgba(0,0,0,0.25);
 }
 .ebook__img-list li img{max-height: 80vh;}
 
@@ -142,9 +145,21 @@
 */
 @keyframes fade_in {
 	from{
+		transform: translateX(100%);
 		opacity: 0;
 	}
 	to{
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+@keyframes fade_prev {
+	from{
+		transform: translateX(-100%);
+		opacity: 0;
+	}
+	to{
+		transform: translateX(0);
 		opacity: 1;
 	}
 }
