@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
     <title>meure ebook</title>
 
     <link rel="stylesheet" href="./css/base.css">
@@ -66,6 +66,79 @@
               <li>
                 <img src="./img/ebook/ebook_8.jpg" alt="">
               </li>
+
+              <li>
+                <img src="./img/ebook/ebook_1.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_2.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_3.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_4.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_5.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_6.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_7.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_8.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_1.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_2.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_3.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_4.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_5.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_6.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_7.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_8.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_1.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_2.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_3.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_4.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_5.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_6.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_7.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_8.jpg" alt="">
+              </li>
             </ul>
           </div>
         </div>
@@ -76,7 +149,10 @@
             <button type="button" class="ebook__bottom_control_page total">
               전체
             </button>
-            <button type="button" class="ebook__bottom_control_page basic">일반</button>
+            <button type="button" class="ebook__bottom_control_page basic">기본</button>
+            <button type="button" class="ebook__bottom_control_page list" onclick="onPageListModal()">
+              목차
+            </button>
           </div>
           <div class="ebook__scale">
             <button type="button" class="ebook__scale-zoom-in"><span class="wid"></span><span class="height"></span></button>
@@ -98,10 +174,7 @@
           </div>
           <ul class="ebook__page-move-list"></ul>
           <button type="button" class="ebook__page-move-btn next"></button>
-        </div>
-        <button type="button" class="ebook__bottom_control_page_list" onclick="onPageListModal()">
-          <img src="./img/ic_list.png" alt="">
-        </button>
+        </div>        
       </div>
       <!-- 페이지목록 팝업 -->
       <div class="com_pop_wrap ebook__page_modal_wrapper">
@@ -203,19 +276,9 @@
                   <img src="./img/ic_share_blog.png" alt="">
                 </button>
               </li>
-              <!-- <li>
-                <button type="button">
-                  <img src="./img/ic_share_insta.png" alt="">
-                </button>
-              </li> -->
               <li>
                 <button type="button" onclick="onShare('face')">
                   <img src="./img/ic_share_face.png" alt="">
-                </button>
-              </li>
-              <li>
-                <button type="button" onclick="onShare('twt')">
-                  <img src="./img/ic_share_twt.png" alt="">
                 </button>
               </li>
             </ul>
@@ -234,8 +297,8 @@
 <script type="text/javascript" src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
 <script>
-
-
+let vh = window.innerHeight * 0.01;
+document.documentElement.style.setProperty('--vh', `${vh}px`);
 const ebook = new Ebook('.ebook__wrapper',{
   prev:'.ebook__prev',
   next:'.ebook__next',
@@ -264,13 +327,16 @@ function set_value()
 }
 
 function leave() {
-  if(pre_x - event.changedTouches[0].clientX > 20){
-    ebook.toNext();
-  }
-  if(pre_x - event.changedTouches[0].clientX < -20){
-    ebook.toPrev();
+  if(!ebook.zoomMode && event.touches.length == 0){
+    if(pre_x - event.changedTouches[0].clientX > window.innerWidth/2){
+      ebook.toNext();
+    }
+    if(pre_x - event.changedTouches[0].clientX < - window.innerWidth/2){
+      ebook.toPrev();
+    }
   }
 }
+
 
 
 

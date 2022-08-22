@@ -35,6 +35,9 @@ class Ebook {
     this.miniMap = this.div.querySelector('.ebook__mini_map');
     this.dragBox = this.div.querySelector('.ebook__mini_map_drag_box');
     this.pageModalList = this.div.querySelectorAll('.ebook__page_modal_wrapper li');
+    this.pageIdx;
+    this.curPage;
+    this.realIdx;
   }
   init(){
     this.prev.addEventListener('click',()=>{
@@ -257,11 +260,7 @@ class Ebook {
     }
   }
   imgZoomOut(){
-    if(this.zoom > 1){
-      this.imgZoomDefault()
-    }else{
-      this.imgZoomMin()
-    }
+    this.imgZoomDefault()
   }
   imgZoomMax(){
     if(this.zoomMode) return;
@@ -307,25 +306,36 @@ class Ebook {
     
   }
   onPageSetOne(type){
-    let pageIdx;
-    let curPage;
     let pageHtml = '';  
-    let realIdx;
     this.pageList.one.forEach((el,idx)=>{
       if(el.indexOf(this.page) > -1){
-        curPage = el.indexOf(this.page);
-        pageIdx = idx
-        realIdx = idx
+        this.curPage = el.indexOf(this.page);
+        this.pageIdx = this.pageIdx ? this.pageIdx : idx
+        this.realIdx = idx;
       }
     })
     if(type === 'prev'){
-      if(pageIdx > 0) pageIdx--;
+      if(this.pageIdx > 0) {
+        this.pageIdx--;
+      }else{
+        this.pageIdx = this.pageList.one.length-1
+      }
+      this.page = this.pageList.one[this.pageIdx][0];
+      this.pageSet()
     }else if(type === 'next'){
-      if(pageIdx < this.pageList.one.length-1) pageIdx++;
+      if(this.pageIdx < this.pageList.one.length-1) {
+        this.pageIdx++;
+        this.page = this.pageList.one[this.pageIdx][0];
+        this.pageSet()
+      }else{
+        this.pageIdx = 0
+        this.page = 1;
+        this.pageSet()
+      }
     }
-    this.pageSetIdx = pageIdx;
-    this.pageList.one[pageIdx].forEach((el,idx)=>{
-      if(curPage === idx && realIdx === pageIdx){
+    this.pageSetIdx = this.pageIdx;    
+    this.pageList.one[this.pageIdx].forEach((el,idx)=>{
+      if(this.curPage === idx && this.realIdx === this.pageIdx){
         this.pageSetTxt.querySelector('.cur').innerHTML = el
         pageHtml += `<li onclick='toPage(${el})' class='on'>${el}</li>`
         this.pageModalList.forEach((e,idx)=>{
@@ -338,34 +348,44 @@ class Ebook {
       }else{
         pageHtml += `<li onclick='toPage(${el})'>${el}</li>`
       }
-    })  
+    })      
     this.pageListUl.innerHTML = pageHtml;   
   }
   onPageSetTwo(type){
-    let pageIdx;
-    let curPage;
     let pageHtml = '';
-    let realIdx;
     this.pageList.two.forEach((el,idx)=>{
       el.forEach((e,idx2)=>{
         if(e.indexOf(this.page) > -1){
-          curPage = idx2;
-          pageIdx = idx
-          realIdx = idx
+          this.curPage = idx2;
+          this.pageIdx = this.pageIdx ? this.pageIdx : idx;
+          this.realIdx = idx
         }
       })
     })
     if(type === 'prev'){
-      if(pageIdx > 0) pageIdx--;
+      if(this.pageIdx > 0) {this.pageIdx--;
+      }else{
+        this.pageIdx = this.pageList.two.length-1;
+      }
+      this.page = parseInt(this.pageList.two[this.pageIdx][0]);
+      this.pageSet()
     }else if(type === 'next'){
-      if(pageIdx < this.pageList.two.length-1) pageIdx++;
+      if(this.pageIdx < this.pageList.two.length-1) {
+        this.pageIdx++;
+        this.page = parseInt(this.pageList.two[this.pageIdx][0])+1;
+        this.pageSet()
+      }else{
+        this.pageIdx = 0;
+        this.page = 1;
+        this.pageSet()
+      }
     }
-    this.pageSetIdx = pageIdx;
-    this.pageList.two[pageIdx].forEach((el,idx)=>{
-      let list = el.join(' - ');
-      if(curPage === idx && realIdx === pageIdx){
-        this.pageSetTxt.querySelector('.cur').innerHTML = list.split(' - ').join('-')
-        pageHtml += `<li onclick='toPage(${list.split(' - ')[0]})' class='on'>${list}</li>`;
+    this.pageSetIdx = this.pageIdx;
+    this.pageList.two[this.pageIdx].forEach((el,idx)=>{
+      let list = el.join('-');
+      if(this.curPage === idx && this.realIdx === this.pageIdx){
+        this.pageSetTxt.querySelector('.cur').innerHTML = list.split('-').join('-')
+        pageHtml += `<li onclick='toPage(${list.split('-')[0]})' class='on'>${list}</li>`;
         this.pageModalList.forEach((e,idx)=>{
           if(el.includes(idx+1)){
             e.classList.add('on')
@@ -374,7 +394,7 @@ class Ebook {
           }
         })
       }else{
-        pageHtml += `<li onclick='toPage(${list.split(' - ')[0]})'>${list}</li>`;
+        pageHtml += `<li onclick='toPage(${list.split('-')[0]})'>${list}</li>`;
       }
     })
     this.pageListUl.innerHTML = pageHtml;  

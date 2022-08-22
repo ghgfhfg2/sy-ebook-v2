@@ -78,6 +78,55 @@
               <li>
                 <img src="./img/ebook/ebook_8.jpg" alt="">
               </li>
+
+              <li>
+                <img src="./img/ebook/ebook_1.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_2.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_3.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_4.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_5.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_6.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_7.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_8.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_1.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_2.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_3.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_4.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_5.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_6.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_7.jpg" alt="">
+              </li>
+              <li>
+                <img src="./img/ebook/ebook_8.jpg" alt="">
+              </li>
             </ul>
           </div>
         </div>
@@ -234,19 +283,9 @@
                   <img src="./img/ic_share_blog.png" alt="">
                 </button>
               </li>
-              <!-- <li>
-                <button type="button">
-                  <img src="./img/ic_share_insta.png" alt="">
-                </button>
-              </li> -->
               <li>
                 <button type="button" onclick="onShare('face')">
                   <img src="./img/ic_share_face.png" alt="">
-                </button>
-              </li>
-              <li>
-                <button type="button" onclick="onShare('twt')">
-                  <img src="./img/ic_share_twt.png" alt="">
                 </button>
               </li>
             </ul>
@@ -278,24 +317,46 @@ const ebook = new Ebook('.ebook__wrapper',{
 ebook.init();
 
 
-
+let prevScrX = 0;
+let prevScrY = 0;
+let prevZoom = false;
 function onPrint() {
   let hiddenHeader = document.querySelector('.ebook__top-box');
   let hiddenSide = document.querySelector('.ebook__right-floating');
   let hiddenBottom = document.querySelector('.ebook__bottom-box');
   let hiddenBtn = document.querySelector('.ebook__control');
+  let hiddenMinimap = document.querySelector('.ebook__mini_map');
+  let hiddenDragBox = document.querySelector('.ebook__mini_map_drag_box');
  
   window.onbeforeprint = function () {
     hiddenHeader.style.display = "none";
     hiddenSide.style.display = "none";
     hiddenBottom.style.display = "none";
     hiddenBtn.style.display = "none";
+    hiddenMinimap.style.display = "none";
+    hiddenDragBox.style.display = "none";    
+    if(ebook.zoomMode){
+      prevScrX = ebook.scrollBox.scrollLeft;
+      prevScrY = ebook.scrollBox.scrollTop;
+      prevZoom = true;
+      ebook.imgZoomDefault();
+    }
   }
   window.onafterprint = function () {
     hiddenHeader.style.display = "flex";
     hiddenSide.style.display = "flex";
     hiddenBottom.style.display = "flex";
     hiddenBtn.style.display = "block";
+    hiddenMinimap.style.display = "";
+    hiddenDragBox.style.display = "";
+    if(prevZoom){
+      ebook.imgZoomMax();
+      setTimeout(() => {
+        ebook.scrollBox.scrollLeft = prevScrX;
+        ebook.scrollBox.scrollTop = prevScrY;
+      }, 50);
+      prevZoom = false;
+    }
   }
   window.print();
 }
